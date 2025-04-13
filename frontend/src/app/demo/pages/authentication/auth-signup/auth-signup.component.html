@@ -1,0 +1,68 @@
+<div class="auth-wrapper">
+  <div class="auth-content">
+    <div class="auth-bg">
+      <span class="r"></span>
+      <span class="r s"></span>
+      <span class="r s"></span>
+      <span class="r"></span>
+    </div>
+    <div class="card">
+      <div class="card-body text-center">
+        <div class="mb-4">
+          <i class="feather icon-user-plus auth-icon"></i>
+        </div>
+        <h3 class="mb-4">Sign up</h3>
+        <form [formGroup]="applyForm" (ngSubmit)="signup()">
+
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Nom" formControlName="nom" required />
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Prénom" formControlName="prenom" required />
+          </div>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Username" formControlName="login" required />
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="email" class="form-control" placeholder="Email" formControlName="email" required />
+          </div>
+
+          <div class="input-group mb-3">
+            <select class="form-control" formControlName="role" required>
+              <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+            </select>
+          </div>
+
+          <div class="input-group mb-4">
+            <input type="password" class="form-control" placeholder="Mot de passe" formControlName="password" required />
+          </div>
+
+          <div class="input-group mb-4">
+            <input type="password" class="form-control" placeholder="Confirmer le mot de passe" formControlName="confirmPassword" required />
+          </div>
+          <div *ngIf="applyForm.errors?.['passwordsMismatch'] && formSubmitted"
+               class="text-danger">
+            Les mots de passe ne correspondent pas.
+          </div>
+
+
+          <button type="submit" [disabled]="applyForm.invalid" class="btn btn-primary mb-4">S'inscrire</button>
+        </form>
+
+        <div class="form-group text-start mb-4">
+          <div class="checkbox checkbox-fill d-inline">
+            <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-1" checked />
+            <label for="checkbox-fill-1" class="cr">Save Details</label>
+          </div>
+        </div>
+
+        <p class="mb-0 text-muted">
+          Already have an account?
+          <a [routerLink]="['/auth/signin']">Log in</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
