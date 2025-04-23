@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Router, RouterModule} from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -23,6 +23,7 @@ export class AuthSignupComponent {
   roles = Object.values(Role);
   formSubmitted = false;
 
+  // Create the form group with fields for the general user data
   applyForm = new FormGroup(
     {
       nom: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
@@ -31,8 +32,14 @@ export class AuthSignupComponent {
       role: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required, Validators.minLength(8)]),
       confirmPassword: new FormControl('', [Validators.required]),
-      login: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)])
+      login: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
 
+      // Chauffeur-specific fields (initially optional)
+      idPermis: new FormControl(''),
+      typePermis: new FormControl(''),
+      dateValiditePermis: new FormControl(''),
+      disponibilite: new FormControl(false),
+      etatCivile: new FormControl(''),
     },
     { validators: AuthSignupComponent.passwordsMatchValidator }
   );
@@ -45,7 +52,7 @@ export class AuthSignupComponent {
     return password === confirmPassword ? null : { passwordsMismatch: true };
   }
 
-  // ✅ Tout le code ici est dans la méthode `signup()`
+  // Handle the signup process
   signup(): void {
     this.formSubmitted = true;
 
@@ -53,17 +60,28 @@ export class AuthSignupComponent {
 
     const selectedRole = this.applyForm.value.role as Role;
 
+    // Construct the RegisterRequest object
     const registerRequest: RegisterRequest = {
-      id: 0,
+      id: 0, // id is assumed to be set by the backend (auto-generated)
       login: this.applyForm.value.login!,
       nom: this.applyForm.value.nom!,
       prenom: this.applyForm.value.prenom!,
       email: this.applyForm.value.email!,
       role: selectedRole,
       password: this.applyForm.value.password!,
-      token: ''
-    };
+      token: '',
 
+      // Include chauffeur-specific fields only if the selected role is CHAUFFEUR
+      ...(selectedRole === Role.CHAUFFEUR && {
+        idPermis: this.applyForm.value.idPermis,
+        typePermis: this.applyForm.value.typePermis,
+        dateValiditePermis: this.applyForm.value.dateValiditePermis ? new Date(this.applyForm.value.dateValiditePermis) : null,
+        disponibilite: this.applyForm.value.disponibilite,
+        etatCivile: this.applyForm.value.etatCivile
+      }),
+
+    };
+    console.log("🧾 applyForm.value complet :", this.applyForm.value);
     console.log('✅ Données envoyées :', registerRequest);
 
     this.authService.signup(registerRequest).subscribe({

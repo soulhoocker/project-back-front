@@ -1,0 +1,157 @@
+// src/app/moderator-dashboard/moderator-dashboard.component.scss
+.dashboard-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+
+  .tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+
+    button {
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-right: 5px;
+      border-bottom: 3px solid transparent;
+
+      &.active {
+        border-bottom: 3px solid #4285f4;
+        font-weight: bold;
+      }
+
+      &:hover {
+        background-color: #f5f5f5;
+      }
+    }
+  }
+
+  .tab-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+    h2 {
+      margin-top: 0;
+      color: #4285f4;
+    }
+
+    .form-container {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+
+      .form-group {
+        margin-bottom: 15px;
+
+        label {
+          display: block;
+          margin-bottom: 5px;
+          font-weight: bold;
+        }
+
+        input, select {
+          width: 100%;
+          padding: 8px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+        }
+      }
+
+      .form-row {
+        display: flex;
+        gap: 15px;
+
+        .form-group {
+          flex: 1;
+        }
+      }
+
+      button {
+        background-color: #4285f4;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #3367d6;
+        }
+      }
+    }
+
+    .table-container {
+      overflow-x: auto;
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+
+        th, td {
+          padding: 12px 15px;
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+        }
+
+        th {
+          background-color: #f5f5f5;
+          font-weight: bold;
+        }
+
+        tr:hover {
+          background-color: #f9f9f9;
+        }
+
+        button {
+          padding: 5px 10px;
+          margin-right: 5px;
+          border: none;
+          border-radius: 3px;
+          cursor: pointer;
+
+          &:first-child {
+            background-color: #fbbc05;
+            color: #202124;
+          }
+
+          &:last-child {
+            background-color: #ea4335;
+            color: white;
+          }
+        }
+
+        .status-planifié {
+          color: #34a853;
+          font-weight: bold;
+        }
+
+        .status-en_cours {
+          color: #fbbc05;
+          font-weight: bold;
+        }
+
+        .status-terminé {
+          color: #4285f4;
+          font-weight: bold;
+        }
+
+        .status-annulé {
+          color: #ea4335;
+          font-weight: bold;
+        }
+
+        .available {
+          color: #34a853;
+        }
+
+        .unavailable {
+          color: #ea4335;
+        }
+      }
+    }
+  }
+}

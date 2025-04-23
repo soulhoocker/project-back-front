@@ -1,0 +1,313 @@
+<div class="dashboard-container">
+  <!-- Navigation Tabs with signals -->
+  <nav class="tabs">
+    <button (click)="activeTab = 'buses'" [class.active]="activeTab() === 'buses'">Gestion des Bus</button>
+    <button (click)="activeTab = 'chauffeurs'" [class.active]="activeTab() === 'chauffeurs'">Gestion des Chauffeurs</button>
+  </nav>
+
+  <!-- Bus Management Tab -->
+  @if (activeTab() === 'buses') {
+    <div class="tab-content">
+      <h2>Gestion des Bus</h2>
+
+      <!-- Bus CRUD Form -->
+      <div class="form-container">
+        <h3>{{selectedBus ? 'Modifier' : 'Ajouter'}} un Bus</h3>
+        <form (ngSubmit)="selectedBus ? updateBus() : createBus()">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Immatriculation:</label>
+              <input type="text" [ngModel]="selectedBus ? selectedBus.immatriculation : newBus.immatriculation"
+                     (ngModelChange)="selectedBus ? (selectedBus.immatriculation = $event) : (newBus.immatriculation = $event)"
+                     name="busImmat" required>
+            </div>
+
+            <div class="form-group">
+              <label>Marque/Modèle:</label>
+              <input type="text" [ngModel]="selectedBus ? selectedBus.marqueModel : newBus.marqueModel"
+                     (ngModelChange)="selectedBus ? (selectedBus.marqueModel = $event) : (newBus.marqueModel = $event)"
+                     name="busModel" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Capacité:</label>
+              <input type="number" [ngModel]="selectedBus ? selectedBus.capacite : newBus.capacite"
+                     (ngModelChange)="selectedBus ? (selectedBus.capacite = $event) : (newBus.capacite = $event)"
+                     name="busCapacite" required>
+            </div>
+
+            <div class="form-group">
+              <label>Kilométrage:</label>
+              <input type="number" [ngModel]="selectedBus ? selectedBus.kilometrage : newBus.kilometrage"
+                     (ngModelChange)="selectedBus ? (selectedBus.kilometrage = $event) : (newBus.kilometrage = $event)"
+                     name="busKm">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>État:</label>
+            <input type="text" [ngModel]="selectedBus ? selectedBus.etat : newBus.etat"
+                   (ngModelChange)="selectedBus ? (selectedBus.etat = $event) : (newBus.etat = $event)"
+                   name="busEtat">
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{{selectedBus ? 'Mettre à jour' : 'Ajouter'}}</button>
+            @if (selectedBus) {
+              <button type="button" class="btn btn-secondary" (click)="selectedBus = undefined">Annuler</button>
+            }
+          </div>
+        </form>
+      </div>
+
+      <!-- Bus List -->
+      <div class="table-container">
+        <h3>Liste des Bus</h3>
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Immatriculation</th>
+            <th>Marque/Modèle</th>
+            <th>Capacité</th>
+            <th>Kilométrage</th>
+            <th>État</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (bus of buses(); track bus.id) {
+              <tr>
+                <td>{{bus.immatriculation}}</td>
+                <td>{{bus.marqueModel}}</td>
+                <td>{{bus.capacite}}</td>
+                <td>{{bus.kilometrage}}</td>
+                <td>{{bus.etat}}</td>
+                <td>
+                  <button class="btn btn-sm btn-warning" (click)="selectedBus = bus; loadBusDisponibilites(bus.id)">Modifier</button>
+                  <button class="btn btn-sm btn-danger" (click)="deleteBus(bus.id)">Supprimer</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Bus Disponibilité Section -->
+      @if (selectedBus) {
+        <div class="dispo-container">
+          <h3>Disponibilités pour {{selectedBus.immatriculation}}</h3>
+
+          <!-- Add Disponibilité Form -->
+          <div class="form-container">
+            <form (ngSubmit)="addBusDisponibilite()">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Date Début:</label>
+                  <input type="date" [(ngModel)]="newDispoBus.dateDebutIndisponibilite" name="busDispoStart" required>
+                </div>
+
+                <div class="form-group">
+                  <label>Date Fin:</label>
+                  <input type="date" [(ngModel)]="newDispoBus.dateFinIndisponibilite" name="busDispoEnd" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Description:</label>
+                <input type="text" [(ngModel)]="newDispoBus.descriptionIndisponibilite" name="busDispoDesc">
+              </div>
+
+              <button type="submit" class="btn btn-primary">Ajouter Disponibilité</button>
+            </form>
+          </div>
+
+          <!-- Disponibilité List -->
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Date Début</th>
+              <th>Date Fin</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for (dispo of busDisponibilites(); track dispo.id) {
+                <tr>
+                  <td>{{dispo.dateDebutIndisponibilite | date:'dd/MM/yyyy'}}</td>
+                  <td>{{dispo.dateFinIndisponibilite | date:'dd/MM/yyyy'}}</td>
+                  <td>{{dispo.descriptionIndisponibilite}}</td>
+                  <td>
+                    <button class="btn btn-sm btn-danger" (click)="removeBusDisponibilite(dispo.id)">Supprimer</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Chauffeur Management Tab -->
+  @if (activeTab() === 'chauffeurs') {
+    <div class="tab-content">
+      <h2>Gestion des Chauffeurs</h2>
+
+      <!-- Chauffeur CRUD Form -->
+      <div class="form-container">
+        <h3>{{selectedChauffeur ? 'Modifier' : 'Ajouter'}} un Chauffeur</h3>
+        <form (ngSubmit)="selectedChauffeur ? updateChauffeur() : createChauffeur()">
+          <div class="form-row">
+            <div class="form-group">
+              <label>ID Permis:</label>
+              <input type="text" [ngModel]="selectedChauffeur ? selectedChauffeur.idPermis : newChauffeur.idPermis"
+                     (ngModelChange)="selectedChauffeur ? (selectedChauffeur.idPermis = $event) : (newChauffeur.idPermis = $event)"
+                     name="chauffeurIdPermis" required>
+            </div>
+
+            <div class="form-group">
+              <label>Type Permis:</label>
+              <input type="text" [ngModel]="selectedChauffeur ? selectedChauffeur.typePermis : newChauffeur.typePermis"
+                     (ngModelChange)="selectedChauffeur ? (selectedChauffeur.typePermis = $event) : (newChauffeur.typePermis = $event)"
+                     name="chauffeurTypePermis" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date Validité Permis:</label>
+              <input type="date" [ngModel]="selectedChauffeur ? selectedChauffeur.dateValiditePermis : newChauffeur.dateValiditePermis"
+                     (ngModelChange)="selectedChauffeur ? (selectedChauffeur.dateValiditePermis = $event) : (newChauffeur.dateValiditePermis = $event)"
+                     name="chauffeurDatePermis" required>
+            </div>
+
+            <div class="form-group">
+              <label>État Civil:</label>
+              <input type="text" [ngModel]="selectedChauffeur ? selectedChauffeur.etatCivile : newChauffeur.etatCivile"
+                     (ngModelChange)="selectedChauffeur ? (selectedChauffeur.etatCivile = $event) : (newChauffeur.etatCivile = $event)"
+                     name="chauffeurEtatCivil">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Note:</label>
+              <input type="number" [ngModel]="selectedChauffeur ? selectedChauffeur.note : newChauffeur.note"
+                     (ngModelChange)="selectedChauffeur ? (selectedChauffeur.note = $event) : (newChauffeur.note = $event)"
+                     name="chauffeurNote">
+            </div>
+
+            <div class="form-group">
+              <label>Disponibilité:</label>
+              <select [ngModel]="selectedChauffeur ? selectedChauffeur.disponibilite : newChauffeur.disponibilite"
+                      (ngModelChange)="selectedChauffeur ? (selectedChauffeur.disponibilite = $event) : (newChauffeur.disponibilite = $event)"
+                      name="chauffeurDispo">
+                <option [value]="true">Disponible</option>
+                <option [value]="false">Indisponible</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{{selectedChauffeur ? 'Mettre à jour' : 'Ajouter'}}</button>
+            @if (selectedChauffeur) {
+              <button type="button" class="btn btn-secondary" (click)="selectedChauffeur = undefined">Annuler</button>
+            }
+          </div>
+        </form>
+      </div>
+
+      <!-- Chauffeur List -->
+      <div class="table-container">
+        <h3>Liste des Chauffeurs</h3>
+        <table class="table">
+          <thead>
+          <tr>
+            <th>ID Permis</th>
+            <th>Type Permis</th>
+            <th>Date Validité</th>
+            <th>État Civil</th>
+            <th>Note</th>
+            <th>Disponibilité</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (chauffeur of chauffeurs(); track chauffeur.id) {
+              <tr>
+                <td>{{chauffeur.idPermis}}</td>
+                <td>{{chauffeur.typePermis}}</td>
+                <td>{{chauffeur.dateValiditePermis | date:'dd/MM/yyyy'}}</td>
+                <td>{{chauffeur.etatCivile}}</td>
+                <td>{{chauffeur.note}}</td>
+                <td>{{chauffeur.disponibilite ? 'Disponible' : 'Indisponible'}}</td>
+                <td>
+                  <button class="btn btn-sm btn-warning" (click)="selectedChauffeur = chauffeur; loadChauffeurDisponibilites(chauffeur.id)">Modifier</button>
+                  <button class="btn btn-sm btn-danger" (click)="deleteChauffeur(chauffeur.id)">Supprimer</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Chauffeur Disponibilité Section -->
+      @if (selectedChauffeur) {
+        <div class="dispo-container">
+          <h3>Disponibilités pour {{selectedChauffeur.idPermis}}</h3>
+
+          <!-- Add Disponibilité Form -->
+          <div class="form-container">
+            <form (ngSubmit)="addChauffeurDisponibilite()">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Date Début:</label>
+                  <input type="date" [(ngModel)]="newDispoChauffeur.dateDebutIndisponibilite" name="chauffeurDispoStart" required>
+                </div>
+
+                <div class="form-group">
+                  <label>Date Fin:</label>
+                  <input type="date" [(ngModel)]="newDispoChauffeur.dateFinIndisponibilite" name="chauffeurDispoEnd" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Description:</label>
+                <input type="text" [(ngModel)]="newDispoChauffeur.descriptionIndisponibilite" name="chauffeurDispoDesc">
+              </div>
+
+              <button type="submit" class="btn btn-primary">Ajouter Disponibilité</button>
+            </form>
+          </div>
+
+          <!-- Disponibilité List -->
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Date Début</th>
+              <th>Date Fin</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for (dispo of chauffeurDisponibilites(); track dispo.id) {
+                <tr>
+                  <td>{{dispo.dateDebutIndisponibilite | date:'dd/MM/yyyy'}}</td>
+                  <td>{{dispo.dateFinIndisponibilite | date:'dd/MM/yyyy'}}</td>
+                  <td>{{dispo.descriptionIndisponibilite}}</td>
+                  <td>
+                    <button class="btn btn-sm btn-danger" (click)="removeChauffeurDisponibilite(dispo.id)">Supprimer</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+</div>

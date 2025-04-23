@@ -47,20 +47,38 @@
             Les mots de passe ne correspondent pas.
           </div>
 
+          <!-- Conditional form fields for Chauffeur role -->
+          <div *ngIf="applyForm.value.role === 'CHAUFFEUR'">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="ID Permis" formControlName="idPermis" />
+            </div>
 
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Type de Permis" formControlName="typePermis" />
+            </div>
+
+            <div class="input-group mb-3">
+              <input type="date" class="form-control" placeholder="Date de validité du permis" formControlName="dateValiditePermis" />
+            </div>
+
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="État civil" formControlName="etatCivile" />
+            </div>
+
+            <div class="input-group mb-3">
+
+              <input type="text" class="form-control" placeholder="disponibilite" formControlName="disponibilite" />
+
+            </div>
+          </div>
+
+          <!-- Submit button visible for all roles -->
           <button type="submit" [disabled]="applyForm.invalid" class="btn btn-primary mb-4">S'inscrire</button>
         </form>
 
-        <div class="form-group text-start mb-4">
-          <div class="checkbox checkbox-fill d-inline">
-            <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-1" checked />
-            <label for="checkbox-fill-1" class="cr">Save Details</label>
-          </div>
-        </div>
-
         <p class="mb-0 text-muted">
           Already have an account?
-          <a [routerLink]="['/auth/signin']">Log in</a>
+          <a [routerLink]="['/auth/login']">Log in</a>
         </p>
       </div>
     </div>

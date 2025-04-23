@@ -1,30 +1,27 @@
 <div class="row">
-  @for (sale of sales; track sale) {
-    <div class="{{ sale.design }} col-xl-4">
-      <app-card [hidHeader]="true">
-        <h6 class="mb-4">{{ sale.title }}</h6>
-        <div class="row d-flex align-items-center">
-          <div class="col-9">
-            <h3 class="f-w-300 d-flex align-items-center m-b-0">
-              <i class="feather {{ sale.icon }} f-30 m-r-10"></i>
-              {{ sale.amount }}
-            </h3>
-          </div>
-          <div class="col-3 text-end">
-            <p class="m-b-0">{{ sale.percentage }}</p>
-          </div>
+  <div class="col-xl-4" *ngFor="let sale of sales">
+    <app-card [hidHeader]="true">
+      <h6 class="mb-4">{{ sale.label }}</h6>
+      <div class="row d-flex align-items-center">
+        <div class="col-9">
+          <h3 class="f-w-300 d-flex align-items-center m-b-0">
+            <i class="feather icon-bar-chart f-30 m-r-10"></i>
+            {{ sale.amount }}
+          </h3>
         </div>
-        <div class="m-t-30">
-          <ngb-progressbar type="progress-bar {{ sale.progress_bg }}" height="7px" [value]="sale.progress"></ngb-progressbar>
+        <div class="col-3 text-end">
+          <p class="m-b-0">{{ sale.percentage }}</p>
         </div>
-      </app-card>
-    </div>
-  }
+      </div>
+    </app-card>
+  </div>
+
   <div class="col-xl-8 col-md-6">
     <app-card cardTitle="Users From United States">
       <div id="world-low" style="height: 450px"></div>
     </app-card>
   </div>
+
   <div class="col-xl-4 col-md-6">
     <div class="card bg-c-blue">
       <div class="card-header borderless">
@@ -41,60 +38,40 @@
         <div id="widget-line-chart" class="WidgetlineChart2 ChartShadow" style="height: 180px"></div>
       </div>
     </div>
+
     <div class="card">
-      @for (list of card; track list) {
-        <div class="card-block {{ list.design }}">
-          <div class="row d-flex align-items-center">
-            <div class="col-auto">
-              <i class="feather {{ list.icon }} f-30"></i>
-            </div>
-            <div class="col">
-              <h3 class="f-w-300">{{ list.number }}</h3>
-              <span class="d-block text-uppercase">{{ list.text }}</span>
-            </div>
+      <div class="card-block" *ngFor="let item of card">
+        <div class="row d-flex align-items-center">
+          <div class="col-auto">
+            <i class="feather {{ item.icon }} f-30"></i>
           </div>
-        </div>
-      }
-    </div>
-  </div>
-  @for (list of social_card; track list) {
-    <div class="{{ list.design }} col-xl-4">
-      <div class="card card-social">
-        <div class="card-block border-bottom">
-          <div class="row align-items-center justify-content-center">
-            <div class="col-auto">
-              <i class="{{ list.icon }} f-36"></i>
-            </div>
-            <div class="col text-end">
-              <h3>{{ list.amount }}</h3>
-              <h5 class="{{ list.color }} mb-0">
-                {{ list.percentage }}
-                <span class="text-muted">Total Likes</span>
-              </h5>
-            </div>
-          </div>
-        </div>
-        <div class="card-block">
-          <div class="row align-items-center justify-content-center card-active">
-            <div class="col-6">
-              <h6 class="text-center m-b-10">
-                <span class="text-muted m-r-5">Target:</span>
-                {{ list.target }}
-              </h6>
-              <ngb-progressbar type="progress-bar {{ list.progress_bg }}" height="6px" [value]="list.progress"></ngb-progressbar>
-            </div>
-            <div class="col-6">
-              <h6 class="text-center m-b-10">
-                <span class="text-muted m-r-5">Duration:</span>
-                {{ list.duration }}
-              </h6>
-              <ngb-progressbar type="progress-bar {{ list.progress_bg_2 }}" height="6px" [value]="list.progress2"></ngb-progressbar>
-            </div>
+          <div class="col">
+            <h3 class="f-w-300">{{ item.value }}</h3>
+            <span class="d-block text-uppercase">{{ item.title }}</span>
           </div>
         </div>
       </div>
     </div>
-  }
+  </div>
+
+  <div class="col-xl-4" *ngFor="let social of social_card">
+    <div class="card card-social">
+      <div class="card-block border-bottom">
+        <div class="row align-items-center justify-content-center">
+          <div class="col-auto">
+            <i class="feather icon-share-2 f-36"></i>
+          </div>
+          <div class="col text-end">
+            <h3>{{ social.followers }}</h3>
+            <h5 class="text-muted mb-0">
+              Total Followers – {{ social.platform }}
+            </h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="col-xl-4 col-md-6">
     <app-card cardTitle="Rating">
       <div class="row align-items-center justify-content-center m-b-20">
@@ -111,48 +88,58 @@
           </h6>
         </div>
       </div>
+
       <div class="row">
-        @for (list of progressing; track list; let last = $last) {
-          <div class="col-xl-12">
-            <h6 class="align-items-center float-start">
-              <i class="fas fa-star f-10 m-r-10 text-c-yellow"></i>
-              {{ list.number }}
-            </h6>
-            <h6 class="align-items-center float-end">{{ list.amount }}</h6>
-            <div class="m-t-30" [ngClass]="{ 'm-b-20': !last }">
-              <ngb-progressbar type="progress-bar {{ list.progress_bg }}" height="6px" [value]="list.progress"></ngb-progressbar>
-            </div>
+        <div class="col-xl-12" *ngFor="let item of progressing; let last = last">
+          <h6 class="align-items-center float-start">
+            <i class="fas fa-star f-10 m-r-10 text-c-yellow"></i>
+            {{ item.title }}
+          </h6>
+          <h6 class="align-items-center float-end">{{ item.percent }}%</h6>
+          <div class="m-t-30" [ngClass]="{ 'm-b-20': !last }">
+            <ngb-progressbar type="success" height="6px" [value]="item.percent"></ngb-progressbar>
           </div>
-        }
+        </div>
       </div>
     </app-card>
   </div>
-  <div class="col-xl-8 col-md-6">
-    <app-card cardTitle="Recent Users" cardClass="Recent-Users table-card" blockClass="p-0">
+
+  <div class="col-xl-12">
+    <app-card cardTitle="Liste des utilisateurs" cardClass="Recent-Users table-card" blockClass="p-0">
       <div class="table-responsive">
         <table class="table table-hover mb-0">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
           <tbody>
-            @for (table of tables; track table) {
-              <tr class="unread">
-                <td>
-                  <img class="rounded-circle" style="width: 40px" src="{{ table.src }}" alt="activity-user" />
-                </td>
-                <td>
-                  <h6 class="mb-1">{{ table.title }}</h6>
-                  <p class="m-0">{{ table.text }}</p>
-                </td>
-                <td>
-                  <h6 class="text-muted">
-                    <i class="fas fa-circle {{ table.color }} f-10 m-r-15"></i>
-                    {{ table.time }}
-                  </h6>
-                </td>
-                <td>
-                  <a href="javascript:" class="badge me-2 theme-bg2 text-white f-12">Reject</a>
-                  <a href="javascript:" class="badge me-2 theme-bg text-white f-12">Approve</a>
-                </td>
-              </tr>
-            }
+          <tr *ngFor="let utilisateur of utilisateurs; trackBy: trackById">
+            <td>{{ utilisateur.id }}</td>
+            <td>{{ utilisateur.nom }}</td>
+            <td>{{ utilisateur.prenom }}</td>
+            <td>{{ utilisateur.email }}</td>
+            <td>{{ utilisateur.role }}</td>
+            <td>
+                <span class="badge" [ngClass]="utilisateur.statutActivation ? 'bg-success' : 'bg-danger'">
+                  {{ utilisateur.statutActivation ? 'Activé' : 'Désactivé' }}
+                </span>
+            </td>
+            <td>
+              <a href="javascript:void(0)" class="badge me-2 theme-bg2 text-white f-12" (click)="approveUser(utilisateur)">
+                Approve
+              </a>
+              <a href="javascript:void(0)" class="badge me-2 theme-bg text-white f-12" (click)="rejectUser(utilisateur)">
+                Reject
+              </a>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>

@@ -1,12 +1,12 @@
+// app-routing.module.ts
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-// Import your components
 import { AdminComponent } from './theme/layout/admin/admin.component';
 import { GuestComponent } from './theme/layout/guest/guest.component';
+import { GerantGuard } from './guards/gerant.guard';
 
-const routes: Routes = [
-  // 🔁 Redirect '' to 'auth/register' as the default route
+// Export the routes array
+export const routes: Routes = [  // Added 'export' keyword
   {
     path: '',
     redirectTo: 'auth/login',
@@ -22,8 +22,8 @@ const routes: Routes = [
           import('./demo/dashboard/dashboard.component').then(
             (c) => c.DashboardComponent
           ),
+        canActivate: [GerantGuard]
       },
-      // Other admin routes...
     ]
   },
   {
