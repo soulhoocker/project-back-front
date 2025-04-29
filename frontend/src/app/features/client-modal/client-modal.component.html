@@ -1,0 +1,86 @@
+<!-- Client Modal -->
+<div class="modal-header">
+  <h5 class="modal-title" id="clientModalLabel">{{ client ? 'Modifier Client' : 'Créer un Client' }}</h5>
+  <button type="button" class="close" (click)="onCancel()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+    <!-- ID (readonly if modification) -->
+    <div *ngIf="client" class="form-group">
+      <label for="id">ID</label>
+      <input id="id" formControlName="id" class="form-control" type="text" readonly />
+    </div>
+
+    <!-- Libellé Client -->
+    <div class="form-group">
+      <label for="libelletClient">Nom du Client</label>
+      <input id="libelletClient" type="text" class="form-control" formControlName="libelletClient" placeholder="Saisir le nom du client" />
+      <div *ngIf="clientForm.get('libelletClient')?.invalid" class="text-danger">
+        Le nom du client est requis.
+      </div>
+    </div>
+
+    <!-- Mail Client -->
+    <div class="form-group">
+      <label for="mailClient">Email du Client</label>
+      <input id="mailClient" type="email" class="form-control" formControlName="mailClient" placeholder="Saisir l'email du client" />
+      <div *ngIf="clientForm.get('mailClient')?.invalid" class="text-danger">
+        L'email est requis et doit être valide.
+      </div>
+    </div>
+
+    <!-- Téléphone Client -->
+    <div class="form-group">
+      <label for="telephoneClient">Téléphone du Client</label>
+      <input id="telephoneClient" type="text" class="form-control" formControlName="telephoneClient" placeholder="Saisir le téléphone du client" />
+      <div *ngIf="clientForm.get('telephoneClient')?.invalid" class="text-danger">
+        Le téléphone est requis.
+      </div>
+    </div>
+
+    <!-- Adresse Client -->
+    <div class="form-group">
+      <label for="adresseClient">Adresse du Client</label>
+      <input id="adresseClient" type="text" class="form-control" formControlName="adresseClient" placeholder="Saisir l'adresse du client" />
+      <div *ngIf="clientForm.get('adresseClient')?.invalid" class="text-danger">
+        L'adresse est requise.
+      </div>
+    </div>
+
+    <!-- Matricule Fiscale -->
+    <div class="form-group">
+      <label for="matriculeFiscale">Matricule Fiscale</label>
+      <input id="matriculeFiscale" type="text" class="form-control" formControlName="matriculeFiscale" placeholder="Saisir le matricule fiscale du client" />
+      <div *ngIf="clientForm.get('matriculeFiscale')?.invalid" class="text-danger">
+        Le matricule fiscale est requis.
+      </div>
+    </div>
+
+    <!-- Zone Action -->
+    <div class="form-group">
+      <label for="zoneAction">Zone d'Action</label>
+      <input id="zoneAction" type="text" class="form-control" formControlName="zoneAction" placeholder="Saisir la zone d'action" />
+      <div *ngIf="clientForm.get('zoneAction')?.invalid" class="text-danger">
+        La zone d'action est requise.
+      </div>
+    </div>
+
+    <!-- Chiffre d'Affaire -->
+    <div class="form-group">
+      <label for="chiffreAffaire">Chiffre d'Affaire</label>
+      <input id="chiffreAffaire" type="number" class="form-control" formControlName="chiffreAffaire" placeholder="Saisir le chiffre d'affaire" />
+      <div *ngIf="clientForm.get('chiffreAffaire')?.invalid" class="text-danger">
+        Le chiffre d'affaire est requis.
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">Annuler</button>
+      <button type="submit" class="btn btn-primary" [disabled]="clientForm.invalid">Enregistrer</button>
+    </div>
+  </form>
+</div>

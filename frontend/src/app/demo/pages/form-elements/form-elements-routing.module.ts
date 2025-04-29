@@ -7,7 +7,8 @@ const routes: Routes = [
     children: [
       {
         path: 'basic',
-        loadComponent: () => import('./basic-elements/basic-elements.component')
+        loadComponent: () =>
+          import('./basic-elements/user-table').then((m) => m.UserTableComponent)
       }
     ]
   }

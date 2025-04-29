@@ -104,45 +104,5 @@
     </app-card>
   </div>
 
-  <div class="col-xl-12">
-    <app-card cardTitle="Liste des utilisateurs" cardClass="Recent-Users table-card" blockClass="p-0">
-      <div class="table-responsive">
-        <table class="table table-hover mb-0">
-          <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Prénom</th>
-            <th>Email</th>
-            <th>Rôle</th>
-            <th>Statut</th>
-            <th>Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let utilisateur of utilisateurs; trackBy: trackById">
-            <td>{{ utilisateur.id }}</td>
-            <td>{{ utilisateur.nom }}</td>
-            <td>{{ utilisateur.prenom }}</td>
-            <td>{{ utilisateur.email }}</td>
-            <td>{{ utilisateur.role }}</td>
-            <td>
-                <span class="badge" [ngClass]="utilisateur.statutActivation ? 'bg-success' : 'bg-danger'">
-                  {{ utilisateur.statutActivation ? 'Activé' : 'Désactivé' }}
-                </span>
-            </td>
-            <td>
-              <a href="javascript:void(0)" class="badge me-2 theme-bg2 text-white f-12" (click)="approveUser(utilisateur)">
-                Approve
-              </a>
-              <a href="javascript:void(0)" class="badge me-2 theme-bg text-white f-12" (click)="rejectUser(utilisateur)">
-                Reject
-              </a>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </app-card>
-  </div>
+
 </div>

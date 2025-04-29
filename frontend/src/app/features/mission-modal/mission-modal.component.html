@@ -1,0 +1,62 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ mission ? 'Modifier Mission' : 'Créer Mission' }}</h5>
+  <button type="button" class="close" (click)="onClose()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="missionForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="trajetId">Trajet</label>
+      <select id="trajetId" formControlName="trajetId" class="form-control">
+        <option *ngFor="let trajet of trajets" [value]="trajet.id">{{ trajet.depart }} → {{ trajet.arrivee }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="busId">Bus</label>
+      <select id="busId" formControlName="busId" class="form-control">
+        <option *ngFor="let bus of buses" [value]="bus.id">{{ bus.modele }} ({{ bus.immatriculation }})</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="chauffeurId">Chauffeur</label>
+      <select id="chauffeurId" formControlName="chauffeurId" class="form-control">
+        <option *ngFor="let chauffeur of chauffeurs" [value]="chauffeur.id">{{ chauffeur.etatCivile }} ({{ chauffeur.idPermis }})</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="clientId">Client</label>
+      <select id="clientId" formControlName="clientId" class="form-control">
+        <option *ngFor="let client of clients" [value]="client.id">{{ client.nom }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="dateHeureDepart">Date et Heure de Départ</label>
+      <input id="dateHeureDepart" type="datetime-local" formControlName="dateHeureDepart" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="dateHeureArrivee">Date et Heure d'Arrivée</label>
+      <input id="dateHeureArrivee" type="datetime-local" formControlName="dateHeureArrivee" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="statut">Statut</label>
+      <select id="statut" formControlName="statut" class="form-control">
+        <option value="planifié">Planifié</option>
+        <option value="en_cours">En Cours</option>
+        <option value="terminé">Terminé</option>
+        <option value="annulé">Annulé</option>
+      </select>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="onClose()">Annuler</button>
+      <button type="submit" class="btn btn-primary" [disabled]="missionForm.invalid">Enregistrer</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,42 @@
+<form [formGroup]="dispoBusForm" (ngSubmit)="ngSubmit()" class="space-y-4 p-4">
+  <!-- Champ ID du Bus -->
+  <div class="form-group">
+    <label for="busId" class="form-label">ID du Bus</label>
+    <input id="busId" type="number" class="form-control" formControlName="busId" placeholder="Saisir l'ID du bus" />
+    <div *ngIf="isInvalid('busId')" class="text-danger">
+      L'ID du bus est requis.
+    </div>
+  </div>
+
+  <!-- Champ Date de début d'indisponibilité -->
+  <div class="form-group">
+    <label for="dateDebutIndisponibilite" class="form-label">Date de début d'indisponibilité</label>
+    <input id="dateDebutIndisponibilite" type="date" class="form-control" formControlName="dateDebutIndisponibilite" />
+    <div *ngIf="isInvalid('dateDebutIndisponibilite')" class="text-danger">
+      La date de début d'indisponibilité est requise.
+    </div>
+  </div>
+
+  <!-- Champ Date de fin d'indisponibilité -->
+  <div class="form-group">
+    <label for="dateFinIndisponibilite" class="form-label">Date de fin d'indisponibilité</label>
+    <input id="dateFinIndisponibilite" type="date" class="form-control" formControlName="dateFinIndisponibilite" />
+    <div *ngIf="isInvalid('dateFinIndisponibilite')" class="text-danger">
+      La date de fin d'indisponibilité est requise.
+    </div>
+  </div>
+
+  <!-- Champ Description de l'indisponibilité -->
+  <div class="form-group">
+    <label for="descriptionIndisponibilite" class="form-label">Description de l'indisponibilité</label>
+    <textarea id="descriptionIndisponibilite" class="form-control" formControlName="descriptionIndisponibilite" placeholder="Saisir une description"></textarea>
+    <div *ngIf="isInvalid('descriptionIndisponibilite')" class="text-danger">
+      La description est requise.
+    </div>
+  </div>
+
+  <!-- Bouton de soumission -->
+  <div class="text-center mt-4">
+    <button type="submit" class="btn btn-primary" [disabled]="dispoBusForm.invalid">Enregistrer</button>
+  </div>
+</form>

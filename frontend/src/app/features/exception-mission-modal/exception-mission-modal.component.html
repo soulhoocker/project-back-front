@@ -1,0 +1,52 @@
+<!-- ExceptionMission Modal -->
+<div class="modal-header">
+  <h5 class="modal-title">{{ exceptionMission ? 'Modifier Exception' : 'Créer une Exception' }}</h5>
+  <button type="button" class="close" (click)="onClose()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="exceptionMissionForm" (ngSubmit)="onSubmit()">
+
+    <!-- ID -->
+    <div *ngIf="exceptionMission" class="form-group">
+      <label for="id">ID</label>
+      <input id="id" formControlName="id" class="form-control" type="text" readonly />
+    </div>
+
+    <!-- Mission ID -->
+    <div class="form-group">
+      <label for="missionId">Mission ID</label>
+      <input id="missionId" formControlName="missionId" class="form-control" type="text" placeholder="Saisir l'ID de mission" />
+      <div *ngIf="exceptionMissionForm.get('missionId')?.invalid" class="text-danger">
+        L'ID de mission est requis.
+      </div>
+    </div>
+
+    <!-- Raison -->
+    <div class="form-group">
+      <label for="raison">Raison</label>
+      <input id="raison" formControlName="raison" class="form-control" type="text" placeholder="Saisir la raison de l'exception" />
+      <div *ngIf="exceptionMissionForm.get('raison')?.invalid" class="text-danger">
+        La raison est requise.
+      </div>
+    </div>
+
+    <!-- Détails -->
+    <div class="form-group">
+      <label for="details">Détails</label>
+      <textarea id="details" formControlName="details" class="form-control" rows="3" placeholder="Saisir les détails"></textarea>
+      <div *ngIf="exceptionMissionForm.get('details')?.invalid" class="text-danger">
+        Les détails sont requis.
+      </div>
+    </div>
+
+    <!-- Submit Buttons -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="onClose()">Annuler</button>
+      <button type="submit" class="btn btn-primary" [disabled]="exceptionMissionForm.invalid">Enregistrer</button>
+    </div>
+
+  </form>
+</div>

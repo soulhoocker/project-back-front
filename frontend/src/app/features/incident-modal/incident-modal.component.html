@@ -1,0 +1,69 @@
+<!-- Incident Modal -->
+<div class="modal-header">
+  <h5 class="modal-title">{{ incident ? 'Modifier Incident' : 'Créer un Incident' }}</h5>
+  <button type="button" class="close" (click)="onClose()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()">
+
+    <!-- ID -->
+    <div *ngIf="incident" class="form-group">
+      <label for="id">ID</label>
+      <input id="id" formControlName="id" class="form-control" type="text" readonly />
+    </div>
+
+    <!-- Mission ID -->
+    <div class="form-group">
+      <label for="missionId">Mission ID</label>
+      <input id="missionId" formControlName="missionId" class="form-control" type="text" placeholder="Saisir l'ID de mission" />
+      <div *ngIf="incidentForm.get('missionId')?.invalid" class="text-danger">
+        L'ID de mission est requis.
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" formControlName="description" class="form-control" rows="3" placeholder="Décrire l'incident"></textarea>
+      <div *ngIf="incidentForm.get('description')?.invalid" class="text-danger">
+        La description est requise.
+      </div>
+    </div>
+
+    <!-- Gravité -->
+    <div class="form-group">
+      <label for="gravite">Gravité</label>
+      <select id="gravite" formControlName="gravite" class="form-control">
+        <option value="">Sélectionner la gravité</option>
+        <option value="mineur">Mineur</option>
+        <option value="majeur">Majeur</option>
+        <option value="critique">Critique</option>
+      </select>
+      <div *ngIf="incidentForm.get('gravite')?.invalid" class="text-danger">
+        La gravité est requise.
+      </div>
+    </div>
+
+    <!-- Résolu -->
+    <div class="form-group">
+      <label for="resolu">Résolu</label>
+      <select id="resolu" formControlName="resolu" class="form-control">
+        <option [value]="true">Oui</option>
+        <option [value]="false">Non</option>
+      </select>
+      <div *ngIf="incidentForm.get('resolu')?.invalid" class="text-danger">
+        Indiquer si l'incident est résolu.
+      </div>
+    </div>
+
+    <!-- Submit Buttons -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="onClose()">Annuler</button>
+      <button type="submit" class="btn btn-primary" [disabled]="incidentForm.invalid">Enregistrer</button>
+    </div>
+
+  </form>
+</div>

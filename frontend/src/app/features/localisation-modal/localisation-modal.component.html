@@ -1,0 +1,61 @@
+<!-- Localisation Modal -->
+<div class="modal-header">
+  <h5 class="modal-title">{{ localisation ? 'Modifier Localisation' : 'Créer une Localisation' }}</h5>
+  <button type="button" class="close" (click)="onClose()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="localisationForm" (ngSubmit)="onSubmit()">
+
+    <!-- ID -->
+    <div *ngIf="localisation" class="form-group">
+      <label for="id">ID</label>
+      <input id="id" formControlName="id" class="form-control" type="text" readonly />
+    </div>
+
+    <!-- Mission ID -->
+    <div class="form-group">
+      <label for="missionId">Mission ID</label>
+      <input id="missionId" formControlName="missionId" class="form-control" type="text" placeholder="Saisir l'ID de mission" />
+      <div *ngIf="localisationForm.get('missionId')?.invalid" class="text-danger">
+        L'ID de mission est requis.
+      </div>
+    </div>
+
+    <!-- Latitude -->
+    <div class="form-group">
+      <label for="latitude">Latitude</label>
+      <input id="latitude" formControlName="latitude" type="number" class="form-control" placeholder="Saisir la latitude" />
+      <div *ngIf="localisationForm.get('latitude')?.invalid" class="text-danger">
+        La latitude est requise.
+      </div>
+    </div>
+
+    <!-- Longitude -->
+    <div class="form-group">
+      <label for="longitude">Longitude</label>
+      <input id="longitude" formControlName="longitude" type="number" class="form-control" placeholder="Saisir la longitude" />
+      <div *ngIf="localisationForm.get('longitude')?.invalid" class="text-danger">
+        La longitude est requise.
+      </div>
+    </div>
+
+    <!-- Horodatage -->
+    <div class="form-group">
+      <label for="horodatage">Horodatage</label>
+      <input id="horodatage" formControlName="horodatage" type="datetime-local" class="form-control" />
+      <div *ngIf="localisationForm.get('horodatage')?.invalid" class="text-danger">
+        L'horodatage est requis.
+      </div>
+    </div>
+
+    <!-- Submit Buttons -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="onClose()">Annuler</button>
+      <button type="submit" class="btn btn-primary" [disabled]="localisationForm.invalid">Enregistrer</button>
+    </div>
+
+  </form>
+</div>

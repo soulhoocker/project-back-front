@@ -3,6 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService, UtilisateurDTO } from '../dashboard/core/services/user.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
+import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { ModifUserComponent } from '../dashboard/modifUser';
+import {FormBuilder} from "@angular/forms";
+import {Router} from "@angular/router"; // ajuste le chemin si besoin
 
 @Component({
   selector: 'app-dashboard',
@@ -40,34 +44,17 @@ export class DashboardComponent implements OnInit {
   ];
   utilisateurs: UtilisateurDTO[] = [];
 
-  constructor(private userService: UserService) {}
-
+  constructor(
+    private userService: UserService,
+    private modalService: NgbModal
+// ici
+  ) {}
   ngOnInit(): void {
-    this.loadUsers();
+
   }
 
-  loadUsers(): void {
-    this.userService.getAllUtilisateurs().subscribe({
-      next: (data) => {
-        this.utilisateurs = data;
-      },
-      error: (err) => {
-        console.error('Erreur lors du chargement des utilisateurs', err);
-      }
-    });
-  }
 
-  approveUser(user: UtilisateurDTO) {
-    console.log('Approving user', user);
-    // Logic to approve user here
-  }
 
-  rejectUser(user: UtilisateurDTO) {
-    console.log('Rejecting user', user);
-    // Logic to reject user here
-  }
 
-  trackById(index: number, item: UtilisateurDTO): number {
-    return item.id;
-  }
+
 }

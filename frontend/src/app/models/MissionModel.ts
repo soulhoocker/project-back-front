@@ -15,6 +15,7 @@ export interface Mission {
   localisation?: Localisation;
   incidents?: Incident[];
   exceptions?: ExceptionMission[];
+  execution?:ExecutionMission[];
   notifications?: Notification[];
   facture?: Facture;
   createdAt: Date;
@@ -22,21 +23,27 @@ export interface Mission {
 }
 
 export interface Trajet {
-  id: string;
-  depart: string;
-  arrivee: string;
-  distance: number;
+  id: number;
+  libelletTrajet: string;          // Updated to match the backend field
+
+  dateDemarrageContrat: string;    // Use string or Date based on how the date is handled in the frontend
+  dateFinContrat: string;          // Use string or Date based on how the date is handled in the frontend
+  distanceMoyenne: number;
   dureeMoyenne: number;
+  typeTarification: string;
+  coutKm:number;
+  montantForfaitaire:number
   zoneId: string;
-  zone?: Zone;
-  clientId: string;
-  client?: Client;
+  zone?: { id: number, designation: string };
+  client?: { id: number, libelletClient: string };
+  bus?: { id: number};
+
 }
 
 export interface Bus {
-  id: string;
+  id: number;
   immatriculation: string;
-  modele: string;
+  marqueModel: string;
   capacite: number;
   kilometrage: number;
   etat: string;
@@ -72,10 +79,14 @@ export interface DispoChauffeur {
 }
 
 export interface Client {
-  id: string;
-  nom: string;
-  tarifParKm: number;
-  trajets?: Trajet[];
+  id: number;
+  libelletClient: string;
+  mailClient: string;
+  telephoneClient: string;
+  adresseClient: string;
+  matriculeFiscale: string;
+  zoneAction: string;
+  chiffreAffaire: number;
 }
 
 export interface Localisation {
@@ -119,6 +130,17 @@ export interface Notification {
 
 export interface Zone {
   id: string;
-  nom: string;
+  designation: string;
   trajets?: Trajet[];
 }
+export interface ExecutionMission {
+  id: number; // Corresponding to Long in Java
+  dateHeureDepartReel: string; // ISO string representation for LocalDateTime
+  dateHeureArriveReel: string; // ISO string representation for LocalDateTime
+  statutExecution: string;
+  revenus: number;
+  missionId: number; // Corresponding to Long in Java
+  localisationId: number; // Corresponding to Long in Java
+  factureId: number; // Corresponding to Long in Java
+}
+

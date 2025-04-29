@@ -1,0 +1,128 @@
+<!-- Trajet Modal -->
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">{{ trajet ? 'Modifier Trajet' : 'Créer un Trajet' }}</h5>
+  <button type="button" class="close" (click)="onClose()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="trajetForm" (ngSubmit)="onSubmit()">
+    <!-- ID (Hidden for new trajets) -->
+    <div *ngIf="trajet" class="form-group">
+      <label for="id">ID</label>
+      <input id="id" formControlName="id" class="form-control" type="text" readonly />
+    </div>
+
+    <!-- Date de démarrage du contrat -->
+    <div class="form-group">
+      <label for="dateDemarrageContrat">Date de démarrage du contrat</label>
+      <input
+        id="dateDemarrageContrat"
+        type="date"
+        class="form-control"
+        formControlName="dateDemarrageContrat"
+        placeholder="Saisir la date de démarrage du contrat"
+      />
+      <div *ngIf="trajetForm.get('dateDemarrageContrat')?.invalid" class="text-danger">
+        La date de démarrage est requise.
+      </div>
+    </div>
+
+
+    <!-- Date de fin du contrat -->
+    <div class="form-group">
+      <label for="dateFinContrat">Date de fin du contrat</label>
+      <input id="dateFinContrat" type="date" class="form-control" formControlName="dateFinContrat" placeholder="Saisir la date de fin du contrat" />
+      <div *ngIf="trajetForm.get('dateFinContrat')?.invalid" class="text-danger">
+        La date de fin est requise.
+      </div>
+    </div>
+
+
+    <!-- Distance Moyenne -->
+    <div class="form-group">
+      <label for="distanceMoyenne">Distance Moyenne (km)</label>
+      <input id="distanceMoyenne" type="number" class="form-control" formControlName="distanceMoyenne" placeholder="Saisir la distance moyenne" />
+      <div *ngIf="trajetForm.get('distanceMoyenne')?.invalid" class="text-danger">
+        La distance moyenne est requise et doit être supérieure à 0.
+      </div>
+    </div>
+
+    <!-- Durée Moyenne -->
+    <div class="form-group">
+      <label for="dureeMoyenne">Durée moyenne (min)</label>
+      <input id="dureeMoyenne" type="number" class="form-control" formControlName="dureeMoyenne" placeholder="Saisir la durée" />
+      <div *ngIf="trajetForm.get('dureeMoyenne')?.invalid" class="text-danger">
+        La durée est requise et doit être supérieure à 0.
+      </div>
+    </div>
+    <!-- Coût par Km -->
+    <div class="form-group">
+      <label for="coutKm">Coût par km (€)</label>
+      <input id="coutKm" type="number" class="form-control" formControlName="coutKm" placeholder="Saisir le coût par km" />
+      <div *ngIf="trajetForm.get('coutKm')?.invalid" class="text-danger">
+        Le coût par km est requis et doit être supérieur à 0.
+      </div>
+    </div>
+
+    <!-- Type de tarification -->
+    <div class="form-group">
+      <label for="typeTarification">Type de tarification</label>
+      <input id="typeTarification" type="text" class="form-control" formControlName="typeTarification" placeholder="Ex: Forfaitaire ou Par km" />
+      <div *ngIf="trajetForm.get('typeTarification')?.invalid" class="text-danger">
+        Le type de tarification est requis.
+      </div>
+    </div>
+
+    <!-- Montant Forfaitaire -->
+    <div class="form-group">
+      <label for="montantForfaitaire">Montant forfaitaire (€)</label>
+      <input id="montantForfaitaire" type="number" class="form-control" formControlName="montantForfaitaire" placeholder="Saisir le montant forfaitaire" />
+      <div *ngIf="trajetForm.get('montantForfaitaire')?.invalid" class="text-danger">
+        Le montant forfaitaire est requis.
+      </div>
+    </div>
+
+    <!-- Zone -->
+    <div class="form-group">
+      <label for="zoneId">Zone</label>
+      <select id="zoneId" class="form-control" formControlName="zoneId">
+        <option value="">Sélectionner une zone</option>
+        <option *ngFor="let zone of zones" [value]="zone.id">{{ zone.designation }}</option>
+      </select>
+      <div *ngIf="trajetForm.get('zoneId')?.invalid" class="text-danger">
+        La zone est requise.
+      </div>
+    </div>
+
+    <!-- Client -->
+    <div class="form-group">
+      <label for="clientId">Client</label>
+      <select id="clientId" class="form-control" formControlName="clientId">
+        <option value="">Sélectionner un client</option>
+        <option *ngFor="let client of clients" [value]="client.id">{{ client.libelletClient }}</option>
+      </select>
+      <div *ngIf="trajetForm.get('clientId')?.invalid" class="text-danger">
+        Le client est requis.
+      </div>
+    </div>
+
+    <!-- Bus -->
+    <div class="form-group">
+      <label for="busId">Bus</label>
+      <select id="busId" class="form-control" formControlName="busId">
+        <option value="">Sélectionner un bus</option>
+        <option *ngFor="let bus of buses" [value]="bus.id">{{ bus.designation }}</option>
+      </select>
+      <div *ngIf="trajetForm.get('busId')?.invalid" class="text-danger">
+        Le bus est requis.
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="onClose()">Annuler</button>
+      <button type="submit" class="btn btn-primary" [disabled]="trajetForm.invalid">Enregistrer</button>
+    </div>
+  </form>
+</div>

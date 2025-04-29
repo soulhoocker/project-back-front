@@ -1,0 +1,51 @@
+<form [formGroup]="busForm" (ngSubmit)="onSubmit()" class="space-y-4 p-4">
+
+  <div class="form-group">
+    <label for="immatriculation" class="form-label">Immatriculation</label>
+    <input id="immatriculation" type="text" class="form-control" formControlName="immatriculation" placeholder="Saisir l'immatriculation" />
+    <div *ngIf="isInvalid('immatriculation')" class="text-danger">
+      L'immatriculation est requise.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="marqueModel" class="form-label">Modèle</label>
+    <input id="marqueModel" type="text" class="form-control" formControlName="marqueModel" placeholder="Saisir le modèle" />
+    <div *ngIf="isInvalid('marqueModel')" class="text-danger">
+      Le modèle est requis.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="capacite" class="form-label">Capacité</label>
+    <input id="capacite" type="number" class="form-control" formControlName="capacite" placeholder="Saisir la capacité" />
+    <div *ngIf="isInvalid('capacite')" class="text-danger">
+      La capacité est requise et doit être au moins 1.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="kilometrage" class="form-label">Kilométrage</label>
+    <input id="kilometrage" type="number" class="form-control" formControlName="kilometrage" placeholder="Saisir le kilométrage" />
+    <div *ngIf="isInvalid('kilometrage')" class="text-danger">
+      Le kilométrage est requis et doit être supérieur ou égal à 0.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="etat" class="form-label">État</label>
+    <select id="etat" class="form-control" formControlName="etat">
+      <option value="" disabled>Choisir l'état</option>
+      <option value="EnService">En Service</option>
+      <option value="HorsService">Hors Service</option>
+      <option value="EnMaintenance">En Maintenance</option>
+    </select>
+    <div *ngIf="isInvalid('etat')" class="text-danger">
+      L'état est requis.
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <button type="submit" class="btn btn-primary" [disabled]="busForm.invalid">Enregistrer</button>
+  </div>
+</form>

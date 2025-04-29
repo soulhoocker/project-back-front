@@ -1,0 +1,64 @@
+<!-- Facture Modal -->
+<div class="modal-header">
+  <h5 class="modal-title">{{ facture ? 'Modifier Facture' : 'Créer une Facture' }}</h5>
+  <button type="button" class="close" (click)="onClose()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="factureForm" (ngSubmit)="onSubmit()">
+
+    <!-- ID -->
+    <div *ngIf="facture" class="form-group">
+      <label for="id">ID</label>
+      <input id="id" formControlName="id" class="form-control" type="text" readonly />
+    </div>
+
+    <!-- Mission ID -->
+    <div class="form-group">
+      <label for="missionId">Mission ID</label>
+      <input id="missionId" formControlName="missionId" class="form-control" type="text" placeholder="Saisir l'ID de mission" />
+      <div *ngIf="factureForm.get('missionId')?.invalid" class="text-danger">
+        L'ID de mission est requis.
+      </div>
+    </div>
+
+    <!-- Montant -->
+    <div class="form-group">
+      <label for="montant">Montant (€)</label>
+      <input id="montant" formControlName="montant" class="form-control" type="number" placeholder="Saisir le montant" />
+      <div *ngIf="factureForm.get('montant')?.invalid" class="text-danger">
+        Le montant est requis et doit être supérieur à 0.
+      </div>
+    </div>
+
+    <!-- Payée -->
+    <div class="form-group">
+      <label for="payee">Payée</label>
+      <select id="payee" formControlName="payee" class="form-control">
+        <option [value]="true">Oui</option>
+        <option [value]="false">Non</option>
+      </select>
+      <div *ngIf="factureForm.get('payee')?.invalid" class="text-danger">
+        Veuillez indiquer si la facture est payée.
+      </div>
+    </div>
+
+    <!-- Date d'Émission -->
+    <div class="form-group">
+      <label for="dateEmission">Date d'émission</label>
+      <input id="dateEmission" formControlName="dateEmission" class="form-control" type="date" />
+      <div *ngIf="factureForm.get('dateEmission')?.invalid" class="text-danger">
+        La date d'émission est requise.
+      </div>
+    </div>
+
+    <!-- Submit Buttons -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="onClose()">Annuler</button>
+      <button type="submit" class="btn btn-primary" [disabled]="factureForm.invalid">Enregistrer</button>
+    </div>
+
+  </form>
+</div>

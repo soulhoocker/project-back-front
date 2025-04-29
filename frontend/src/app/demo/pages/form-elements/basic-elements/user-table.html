@@ -1,0 +1,60 @@
+<div>
+  <div class="col-xl-12">
+    <app-card cardTitle="Liste des utilisateurs" cardClass="Recent-Users table-card" blockClass="p-0">
+      <div class="p-3">
+        <input type="text"
+               class="form-control"
+               placeholder="🔍 Rechercher un utilisateur..."
+               [(ngModel)]="searchText">
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let utilisateur of utilisateursFiltres; trackBy: trackById">
+            <td>{{ utilisateur.id }}</td>
+            <td>{{ utilisateur.nom }}</td>
+            <td>{{ utilisateur.prenom }}</td>
+            <td>{{ utilisateur.email }}</td>
+            <td>{{ utilisateur.role }}</td>
+            <td>
+                <span class="badge" [ngClass]="utilisateur.statutActivation ? 'bg-success' : 'bg-danger'">
+                  {{ utilisateur.statutActivation ? 'Activé' : 'Désactivé' }}
+                </span>
+            </td>
+            <td>
+              <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-sm btn-outline-success" (click)="approveUser(utilisateur)">
+                  <i class="feather icon-edit"></i> Modifier
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="rejectUser(utilisateur)">
+                  <i class="feather icon-trash-2"></i> Supprimer
+                </button>
+                <button class="btn btn-sm btn-outline-warning"
+                        (click)="toggleActivation(utilisateur)">
+                  <i class="feather" [ngClass]="utilisateur.statutActivation ? 'icon-user-x' : 'icon-user-check'"></i>
+                  {{ utilisateur.statutActivation ? 'Désactiver' : 'Activer' }}
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <button class="btn btn-sm btn-primary mt-3" (click)="goToCreateUser()">
+          <i class="feather icon-user-plus"></i> Créer
+        </button>
+      </div>
+    </app-card>
+  </div>
+</div>

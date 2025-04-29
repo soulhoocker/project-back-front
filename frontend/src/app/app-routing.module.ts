@@ -17,6 +17,14 @@ export const routes: Routes = [  // Added 'export' keyword
     component: AdminComponent,
     children: [
       {
+        path: 'mod-dashboard',
+        loadComponent: () =>
+          import('../app/demo/dashboard/mod-dashboard/mod-dashboard.component').then(
+            (c) => c.ModDashboardComponent
+          ),
+        canActivate: [GerantGuard] // <-- Tu peux garder cette protection si tu veux protéger l'accès
+      },
+      {
         path: 'dashboard',
         loadComponent: () =>
           import('./demo/dashboard/dashboard.component').then(
@@ -24,6 +32,10 @@ export const routes: Routes = [  // Added 'export' keyword
           ),
         canActivate: [GerantGuard]
       },
+      {
+        path: 'user-table',
+        loadComponent: () => import('./demo/pages/form-elements/basic-elements/user-table').then(m => m.UserTableComponent)
+      }
     ]
   },
   {
@@ -53,6 +65,8 @@ export const routes: Routes = [  // Added 'export' keyword
         (c) => c.AuthSignupComponent
       ),
   },
+
+
 ];
 
 @NgModule({

@@ -1,0 +1,58 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">{{ notification ? 'Modifier Notification' : 'Créer une Notification' }}</h5>
+  <button type="button" class="close" (click)="onClose()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="notificationForm" (ngSubmit)="onSubmit()">
+    <!-- ID (Hidden for new notifications) -->
+    <div *ngIf="notification" class="form-group">
+      <label for="id">ID</label>
+      <input id="id" formControlName="id" class="form-control" type="text" readonly />
+    </div>
+
+    <!-- Mission ID -->
+    <div class="form-group">
+      <label for="missionId">Mission ID</label>
+      <input id="missionId" formControlName="missionId" class="form-control" placeholder="Saisir le Mission ID" />
+      <div *ngIf="notificationForm.get('missionId')?.invalid" class="text-danger">
+        Le Mission ID est requis.
+      </div>
+    </div>
+
+    <!-- Message -->
+    <div class="form-group">
+      <label for="message">Message</label>
+      <textarea id="message" formControlName="message" class="form-control" placeholder="Saisir le message"></textarea>
+      <div *ngIf="notificationForm.get('message')?.invalid" class="text-danger">
+        Le message est requis.
+      </div>
+    </div>
+
+    <!-- Lue -->
+    <div class="form-group">
+      <label for="lue">Lue</label>
+      <input id="lue" type="checkbox" formControlName="lue" />
+    </div>
+
+    <!-- Type -->
+    <div class="form-group">
+      <label for="type">Type</label>
+      <select id="type" formControlName="type" class="form-control">
+        <option value="info">Info</option>
+        <option value="alerte">Alerte</option>
+        <option value="urgence">Urgence</option>
+      </select>
+      <div *ngIf="notificationForm.get('type')?.invalid" class="text-danger">
+        Le type est requis.
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="onClose()">Annuler</button>
+      <button type="submit" class="btn btn-primary" [disabled]="notificationForm.invalid">Enregistrer</button>
+    </div>
+  </form>
+</div>

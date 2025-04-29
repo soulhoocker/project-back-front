@@ -1,156 +1,614 @@
-// src/app/moderator-dashboard/moderator-dashboard.component.scss
+// Variables
+$primary-color: #3b82f6;
+$primary-light: rgba(59, 130, 246, 0.1);
+$success-color: #10b981;
+$danger-color: #ef4444;
+$warning-color: #f59e0b;
+$text-dark: #1f2937;
+$text-medium: #4b5563;
+$text-light: #9ca3af;
+$border-color: #e5e7eb;
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$radius-sm: 0.375rem;
+$radius-md: 0.5rem;
+$radius-lg: 1rem;
+$radius-xl: 1.5rem;
+$transition: all 0.2s ease-in-out;
+
+// Color map for grays
+$gray-colors: (
+  '50': #f9fafb,
+  '100': #f3f4f6,
+  '200': #e5e7eb,
+  '300': #d1d5db,
+  '400': #9ca3af,
+  '500': #6b7280,
+  '600': #4b5563,
+  '700': #374151,
+  '800': #1f2937,
+  '900': #111827
+);
+
+// Function to get gray colors
+@function gray($shade) {
+  @return map-get($gray-colors, $shade);
+}
+
+// Base styles
+body {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background-color: gray('50');
+  color: $text-dark;
+}
+
 .dashboard-container {
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
 
-  .tabs {
+  @media (min-width: 768px) {
+    padding: 2rem;
+  }
+}
+
+// Card styles
+.card {
+  background-color: white;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  transition: $transition;
+  overflow: hidden;
+
+  &:hover {
+    box-shadow: $shadow-lg;
+    transform: translateY(-2px);
+  }
+
+  &__header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid $border-color;
     display: flex;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ddd;
+    justify-content: space-between;
+    align-items: center;
 
-    button {
-      padding: 10px 20px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      margin-right: 5px;
-      border-bottom: 3px solid transparent;
-
-      &.active {
-        border-bottom: 3px solid #4285f4;
-        font-weight: bold;
-      }
-
-      &:hover {
-        background-color: #f5f5f5;
-      }
+    h4 {
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin: 0;
+      color: $text-dark;
     }
   }
 
-  .tab-content {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  &__body {
+    padding: 1.5rem;
+  }
+}
 
-    h2 {
-      margin-top: 0;
-      color: #4285f4;
+// Typography
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  color: $text-dark;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+// Metrics cards
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1rem;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.metric-card {
+  background: white;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  transition: $transition;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: $shadow-lg;
+  }
+
+  &__icon {
+    height: 48px;
+    width: 48px;
+    border-radius: $radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+
+    i {
+      font-size: 1.5rem;
+      color: white;
     }
 
-    .form-container {
-      background: #f9f9f9;
-      padding: 15px;
-      border-radius: 5px;
-      margin-bottom: 20px;
+    &--blue {
+      background-color: rgba($primary-color, 0.15);
+      i { color: $primary-color; }
+    }
 
-      .form-group {
-        margin-bottom: 15px;
+    &--green {
+      background-color: rgba($success-color, 0.15);
+      i { color: $success-color; }
+    }
 
-        label {
-          display: block;
-          margin-bottom: 5px;
-          font-weight: bold;
-        }
+    &--orange {
+      background-color: rgba($warning-color, 0.15);
+      i { color: $warning-color; }
+    }
 
-        input, select {
-          width: 100%;
-          padding: 8px;
-          border: 1px solid #ddd;
-          border-radius: 4px;
-        }
-      }
+    &--red {
+      background-color: rgba($danger-color, 0.15);
+      i { color: $danger-color; }
+    }
+  }
 
-      .form-row {
-        display: flex;
-        gap: 15px;
+  &__content {
+    h5 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0;
+      margin-bottom: 0.25rem;
+    }
 
-        .form-group {
-          flex: 1;
-        }
-      }
+    p {
+      color: $text-light;
+      margin: 0;
+      font-size: 0.875rem;
+    }
+  }
 
-      button {
-        background-color: #4285f4;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 4px;
-        cursor: pointer;
+  &__trend {
+    display: flex;
+    align-items: center;
+    font-size: 0.813rem;
+    margin-top: 0.5rem;
+    font-weight: 500;
 
-        &:hover {
-          background-color: #3367d6;
-        }
+    &--up {
+      color: $success-color;
+    }
+
+    &--down {
+      color: $danger-color;
+    }
+
+    i {
+      margin-right: 0.25rem;
+    }
+  }
+}
+
+// Buttons
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: $radius-md;
+  transition: $transition;
+  cursor: pointer;
+  border: 1px solid $border-color;
+  background-color: white;
+  color: $text-medium;
+
+  &:hover {
+    background-color: gray('50');
+  }
+
+  &:focus {
+    outline: 2px solid rgba($primary-color, 0.4);
+    outline-offset: 2px;
+  }
+
+  i {
+    margin-right: 0.5rem;
+  }
+
+  &-primary {
+    @extend .btn;
+    background-color: $primary-color;
+    color: white;
+    border-color: $primary-color;
+
+    &:hover {
+      background-color: darken($primary-color, 5%);
+      border-color: darken($primary-color, 5%);
+    }
+  }
+
+  &-outline {
+    @extend .btn;
+    border-color: $primary-color;
+    color: $primary-color;
+
+    &:hover {
+      background-color: rgba($primary-color, 0.05);
+    }
+  }
+
+  &-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.813rem;
+  }
+
+  &-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+// Form elements
+.form-input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  transition: $transition;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+  }
+
+  &::placeholder {
+    color: $text-light;
+  }
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  width: 100%;
+  padding: 0.625rem 2.5rem 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  transition: $transition;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+  }
+}
+
+// Charts and Map
+.chart-container {
+  height: 320px;
+  border-radius: $radius-md;
+  overflow: hidden;
+}
+
+.map-container {
+  height: 400px;
+  border-radius: $radius-md;
+  overflow: hidden;
+  border: 1px solid $border-color;
+}
+
+// Period selectors
+.period-selector {
+  display: flex;
+  gap: 0.5rem;
+
+  .btn {
+    min-width: 5rem;
+
+    &.active {
+      background-color: $primary-light;
+      color: $primary-color;
+      border-color: $primary-color;
+    }
+  }
+}
+
+// Tables
+.table-container {
+  overflow-x: auto;
+  border-radius: $radius-md;
+  margin-top: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 0.875rem 1rem;
+    font-size: 0.875rem;
+    text-align: left;
+  }
+
+  th {
+    background-color: gray('50');
+    font-weight: 600;
+    color: $text-medium;
+    border-bottom: 1px solid $border-color;
+  }
+
+  td {
+    border-bottom: 1px solid $border-color;
+    color: $text-dark;
+  }
+
+  tbody tr {
+    transition: $transition;
+
+    &:hover {
+      background-color: rgba($primary-color, 0.02);
+    }
+
+    &:last-child td {
+      border-bottom: none;
+    }
+  }
+}
+
+// Status badges
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 9999px;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    margin-right: 0.375rem;
+  }
+
+  &--active {
+    @extend .status-badge;
+    background-color: rgba($success-color, 0.1);
+    color: $success-color;
+
+    &::before {
+      background-color: $success-color;
+    }
+  }
+
+  &--maintenance {
+    @extend .status-badge;
+    background-color: rgba($warning-color, 0.1);
+    color: $warning-color;
+
+    &::before {
+      background-color: $warning-color;
+    }
+  }
+
+  &--inactive {
+    @extend .status-badge;
+    background-color: rgba($danger-color, 0.1);
+    color: $danger-color;
+
+    &::before {
+      background-color: $danger-color;
+    }
+  }
+}
+
+// Pagination
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  gap: 0.25rem;
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 0.5rem;
+    font-size: 0.875rem;
+    border-radius: $radius-md;
+    transition: $transition;
+    border: 1px solid $border-color;
+    background-color: white;
+    color: $text-medium;
+
+    &:hover {
+      background-color: gray('50');
+    }
+
+    &--active {
+      @extend .pagination__btn;
+      background-color: $primary-color;
+      color: white;
+      border-color: $primary-color;
+
+      &:hover {
+        background-color: darken($primary-color, 5%);
       }
     }
 
-    .table-container {
-      overflow-x: auto;
+    &--disabled {
+      @extend .pagination__btn;
+      opacity: 0.5;
+      cursor: not-allowed;
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
+      &:hover {
+        background-color: white;
+      }
+    }
+  }
+}
 
-        th, td {
-          padding: 12px 15px;
-          text-align: left;
-          border-bottom: 1px solid #ddd;
-        }
+// Summary metrics
+.summary-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 
-        th {
-          background-color: #f5f5f5;
-          font-weight: bold;
-        }
+.summary-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: $radius-md;
+  background-color: gray('50');
+  transition: $transition;
 
-        tr:hover {
-          background-color: #f9f9f9;
-        }
+  &:hover {
+    background-color: rgba($primary-color, 0.05);
+  }
 
-        button {
-          padding: 5px 10px;
-          margin-right: 5px;
-          border: none;
-          border-radius: 3px;
-          cursor: pointer;
+  &__icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: $radius-md;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    box-shadow: $shadow-sm;
 
-          &:first-child {
-            background-color: #fbbc05;
-            color: #202124;
-          }
+    i {
+      color: $primary-color;
+      font-size: 1.25rem;
+    }
+  }
 
-          &:last-child {
-            background-color: #ea4335;
-            color: white;
-          }
-        }
+  &__content {
+    h5 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0;
+    }
 
-        .status-planifié {
-          color: #34a853;
-          font-weight: bold;
-        }
+    p {
+      color: $text-medium;
+      margin: 0;
+      font-size: 0.875rem;
+    }
+  }
+}
 
-        .status-en_cours {
-          color: #fbbc05;
-          font-weight: bold;
-        }
+// Responsive media queries
+@media (max-width: 640px) {
+  .card__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
 
-        .status-terminé {
-          color: #4285f4;
-          font-weight: bold;
-        }
+  .period-selector {
+    width: 100%;
+    justify-content: space-between;
 
-        .status-annulé {
-          color: #ea4335;
-          font-weight: bold;
-        }
+    .btn {
+      flex: 1;
+    }
+  }
+}
 
-        .available {
-          color: #34a853;
-        }
+// Enhanced spacing utilities
+.space-y {
+  > * + * {
+    margin-top: 2rem;
+  }
+}
 
-        .unavailable {
-          color: #ea4335;
-        }
+.gap-x {
+  display: flex;
+  gap: 1rem;
+}
+
+// Dark mode (optional)
+@media (prefers-color-scheme: dark) {
+  body.dark-mode {
+    background-color: gray('900');
+    color: gray('50');
+
+    .card {
+      background-color: gray('800');
+      box-shadow: $shadow-md;
+
+      &__header {
+        border-bottom-color: gray('700');
+      }
+    }
+
+    .metric-card {
+      background-color: gray('800');
+    }
+
+    .btn {
+      background-color: gray('700');
+      border-color: gray('600');
+      color: gray('200');
+
+      &:hover {
+        background-color: gray('600');
+      }
+    }
+
+    .btn-primary {
+      background-color: $primary-color;
+      color: white;
+
+      &:hover {
+        background-color: darken($primary-color, 5%);
+      }
+    }
+
+    .form-input, .form-select {
+      background-color: gray('700');
+      border-color: gray('600');
+      color: gray('200');
+
+      &::placeholder {
+        color: gray('400');
+      }
+    }
+
+    table {
+      th {
+        background-color: gray('700');
+        color: gray('200');
+        border-bottom-color: gray('600');
+      }
+
+      td {
+        border-bottom-color: gray('600');
+        color: gray('200');
+      }
+
+      tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.05);
       }
     }
   }

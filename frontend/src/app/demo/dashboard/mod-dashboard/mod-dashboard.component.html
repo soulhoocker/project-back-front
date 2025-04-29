@@ -1,313 +1,379 @@
-<div class="dashboard-container">
-  <!-- Navigation Tabs with signals -->
-  <nav class="tabs">
-    <button (click)="activeTab = 'buses'" [class.active]="activeTab() === 'buses'">Gestion des Bus</button>
-    <button (click)="activeTab = 'chauffeurs'" [class.active]="activeTab() === 'chauffeurs'">Gestion des Chauffeurs</button>
-  </nav>
+<div class="container-fluid px-4 py-4">
+  <!-- Header Section -->
+  <div class="d-flex justify-content-between align-items-center mb-5">
+    <h1 class="display-6 fw-bold text-primary">
+      <i class="bi bi-bus-front me-2"></i>Transport Management System
+    </h1>
+    <div class="d-flex">
+      <button class="btn btn-outline-secondary me-2">
+        <i class="bi bi-gear"></i> Settings
+      </button>
+      <button class="btn btn-outline-primary">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </button>
+    </div>
+  </div>
 
-  <!-- Bus Management Tab -->
-  @if (activeTab() === 'buses') {
-    <div class="tab-content">
-      <h2>Gestion des Bus</h2>
-
-      <!-- Bus CRUD Form -->
-      <div class="form-container">
-        <h3>{{selectedBus ? 'Modifier' : 'Ajouter'}} un Bus</h3>
-        <form (ngSubmit)="selectedBus ? updateBus() : createBus()">
-          <div class="form-row">
-            <div class="form-group">
-              <label>Immatriculation:</label>
-              <input type="text" [ngModel]="selectedBus ? selectedBus.immatriculation : newBus.immatriculation"
-                     (ngModelChange)="selectedBus ? (selectedBus.immatriculation = $event) : (newBus.immatriculation = $event)"
-                     name="busImmat" required>
-            </div>
-
-            <div class="form-group">
-              <label>Marque/Modèle:</label>
-              <input type="text" [ngModel]="selectedBus ? selectedBus.marqueModel : newBus.marqueModel"
-                     (ngModelChange)="selectedBus ? (selectedBus.marqueModel = $event) : (newBus.marqueModel = $event)"
-                     name="busModel" required>
-            </div>
+  <!-- Main Content with Cards -->
+  <div class="row g-4">
+    <!-- Bus Management Card -->
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-0 py-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0 text-primary">
+              <i class="bi bi-bus-front me-2"></i>Bus Management
+            </h5>
+            <button type="button" class="btn btn-primary" (click)="openModal()">
+              <i class="bi bi-plus-circle me-1"></i> Add Bus
+            </button>
           </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>Capacité:</label>
-              <input type="number" [ngModel]="selectedBus ? selectedBus.capacite : newBus.capacite"
-                     (ngModelChange)="selectedBus ? (selectedBus.capacite = $event) : (newBus.capacite = $event)"
-                     name="busCapacite" required>
-            </div>
-
-            <div class="form-group">
-              <label>Kilométrage:</label>
-              <input type="number" [ngModel]="selectedBus ? selectedBus.kilometrage : newBus.kilometrage"
-                     (ngModelChange)="selectedBus ? (selectedBus.kilometrage = $event) : (newBus.kilometrage = $event)"
-                     name="busKm">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>État:</label>
-            <input type="text" [ngModel]="selectedBus ? selectedBus.etat : newBus.etat"
-                   (ngModelChange)="selectedBus ? (selectedBus.etat = $event) : (newBus.etat = $event)"
-                   name="busEtat">
-          </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">{{selectedBus ? 'Mettre à jour' : 'Ajouter'}}</button>
-            @if (selectedBus) {
-              <button type="button" class="btn btn-secondary" (click)="selectedBus = undefined">Annuler</button>
-            }
-          </div>
-        </form>
-      </div>
-
-      <!-- Bus List -->
-      <div class="table-container">
-        <h3>Liste des Bus</h3>
-        <table class="table">
-          <thead>
-          <tr>
-            <th>Immatriculation</th>
-            <th>Marque/Modèle</th>
-            <th>Capacité</th>
-            <th>Kilométrage</th>
-            <th>État</th>
-            <th>Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-            @for (bus of buses(); track bus.id) {
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
               <tr>
-                <td>{{bus.immatriculation}}</td>
-                <td>{{bus.marqueModel}}</td>
-                <td>{{bus.capacite}}</td>
-                <td>{{bus.kilometrage}}</td>
-                <td>{{bus.etat}}</td>
+                <th class="fw-semibold">License Plate</th>
+                <th class="fw-semibold">Model</th>
+                <th class="fw-semibold">Capacity</th>
+                <th class="fw-semibold">Mileage</th>
+                <th class="fw-semibold">Status</th>
+                <th class="fw-semibold text-center">Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let bus of buses; let i = index" class="py-3">
+                <td class="fw-medium">{{ bus.immatriculation }}</td>
+                <td>{{ bus.marqueModel }}</td>
+                <td>{{ bus.capacite }}</td>
+                <td>{{ bus.kilometrage }}</td>
                 <td>
-                  <button class="btn btn-sm btn-warning" (click)="selectedBus = bus; loadBusDisponibilites(bus.id)">Modifier</button>
-                  <button class="btn btn-sm btn-danger" (click)="deleteBus(bus.id)">Supprimer</button>
+                    <span class="badge" [ngClass]="{
+                      'bg-success': bus.etat === 'Available',
+                      'bg-warning': bus.etat === 'Maintenance',
+                      'bg-danger': bus.etat === 'Out of service'
+                    }">
+                      {{ bus.etat }}
+                    </span>
+                </td>
+                <td class="text-center">
+                  <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-warning" (click)="editBus(bus)">
+                      <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteBus(i)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
                 </td>
               </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Bus Disponibilité Section -->
-      @if (selectedBus) {
-        <div class="dispo-container">
-          <h3>Disponibilités pour {{selectedBus.immatriculation}}</h3>
-
-          <!-- Add Disponibilité Form -->
-          <div class="form-container">
-            <form (ngSubmit)="addBusDisponibilite()">
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Date Début:</label>
-                  <input type="date" [(ngModel)]="newDispoBus.dateDebutIndisponibilite" name="busDispoStart" required>
-                </div>
-
-                <div class="form-group">
-                  <label>Date Fin:</label>
-                  <input type="date" [(ngModel)]="newDispoBus.dateFinIndisponibilite" name="busDispoEnd" required>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label>Description:</label>
-                <input type="text" [(ngModel)]="newDispoBus.descriptionIndisponibilite" name="busDispoDesc">
-              </div>
-
-              <button type="submit" class="btn btn-primary">Ajouter Disponibilité</button>
-            </form>
+              </tbody>
+            </table>
           </div>
-
-          <!-- Disponibilité List -->
-          <table class="table">
-            <thead>
-            <tr>
-              <th>Date Début</th>
-              <th>Date Fin</th>
-              <th>Description</th>
-              <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-              @for (dispo of busDisponibilites(); track dispo.id) {
-                <tr>
-                  <td>{{dispo.dateDebutIndisponibilite | date:'dd/MM/yyyy'}}</td>
-                  <td>{{dispo.dateFinIndisponibilite | date:'dd/MM/yyyy'}}</td>
-                  <td>{{dispo.descriptionIndisponibilite}}</td>
-                  <td>
-                    <button class="btn btn-sm btn-danger" (click)="removeBusDisponibilite(dispo.id)">Supprimer</button>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
         </div>
-      }
-    </div>
-  }
-
-  <!-- Chauffeur Management Tab -->
-  @if (activeTab() === 'chauffeurs') {
-    <div class="tab-content">
-      <h2>Gestion des Chauffeurs</h2>
-
-      <!-- Chauffeur CRUD Form -->
-      <div class="form-container">
-        <h3>{{selectedChauffeur ? 'Modifier' : 'Ajouter'}} un Chauffeur</h3>
-        <form (ngSubmit)="selectedChauffeur ? updateChauffeur() : createChauffeur()">
-          <div class="form-row">
-            <div class="form-group">
-              <label>ID Permis:</label>
-              <input type="text" [ngModel]="selectedChauffeur ? selectedChauffeur.idPermis : newChauffeur.idPermis"
-                     (ngModelChange)="selectedChauffeur ? (selectedChauffeur.idPermis = $event) : (newChauffeur.idPermis = $event)"
-                     name="chauffeurIdPermis" required>
-            </div>
-
-            <div class="form-group">
-              <label>Type Permis:</label>
-              <input type="text" [ngModel]="selectedChauffeur ? selectedChauffeur.typePermis : newChauffeur.typePermis"
-                     (ngModelChange)="selectedChauffeur ? (selectedChauffeur.typePermis = $event) : (newChauffeur.typePermis = $event)"
-                     name="chauffeurTypePermis" required>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>Date Validité Permis:</label>
-              <input type="date" [ngModel]="selectedChauffeur ? selectedChauffeur.dateValiditePermis : newChauffeur.dateValiditePermis"
-                     (ngModelChange)="selectedChauffeur ? (selectedChauffeur.dateValiditePermis = $event) : (newChauffeur.dateValiditePermis = $event)"
-                     name="chauffeurDatePermis" required>
-            </div>
-
-            <div class="form-group">
-              <label>État Civil:</label>
-              <input type="text" [ngModel]="selectedChauffeur ? selectedChauffeur.etatCivile : newChauffeur.etatCivile"
-                     (ngModelChange)="selectedChauffeur ? (selectedChauffeur.etatCivile = $event) : (newChauffeur.etatCivile = $event)"
-                     name="chauffeurEtatCivil">
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>Note:</label>
-              <input type="number" [ngModel]="selectedChauffeur ? selectedChauffeur.note : newChauffeur.note"
-                     (ngModelChange)="selectedChauffeur ? (selectedChauffeur.note = $event) : (newChauffeur.note = $event)"
-                     name="chauffeurNote">
-            </div>
-
-            <div class="form-group">
-              <label>Disponibilité:</label>
-              <select [ngModel]="selectedChauffeur ? selectedChauffeur.disponibilite : newChauffeur.disponibilite"
-                      (ngModelChange)="selectedChauffeur ? (selectedChauffeur.disponibilite = $event) : (newChauffeur.disponibilite = $event)"
-                      name="chauffeurDispo">
-                <option [value]="true">Disponible</option>
-                <option [value]="false">Indisponible</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">{{selectedChauffeur ? 'Mettre à jour' : 'Ajouter'}}</button>
-            @if (selectedChauffeur) {
-              <button type="button" class="btn btn-secondary" (click)="selectedChauffeur = undefined">Annuler</button>
-            }
-          </div>
-        </form>
       </div>
+    </div>
 
-      <!-- Chauffeur List -->
-      <div class="table-container">
-        <h3>Liste des Chauffeurs</h3>
-        <table class="table">
-          <thead>
-          <tr>
-            <th>ID Permis</th>
-            <th>Type Permis</th>
-            <th>Date Validité</th>
-            <th>État Civil</th>
-            <th>Note</th>
-            <th>Disponibilité</th>
-            <th>Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-            @for (chauffeur of chauffeurs(); track chauffeur.id) {
+    <!-- Availability Management Card -->
+    <div class="col-12">
+      <div class="card shadow-sm border-0 mt-4">
+        <div class="card-header bg-white border-0 py-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0 text-primary">
+              <i class="bi bi-calendar-check me-2"></i>Bus Availability
+            </h5>
+            <button type="button" class="btn btn-primary" (click)="openDispoBusModal()">
+              <i class="bi bi-calendar-x me-1"></i> Add Unavailability
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card border-success border-opacity-25">
+                <div class="card-header bg-success bg-opacity-10">
+                  <h6 class="mb-0">
+                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                    Available Buses ({{availableBuses.length}})
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <ul class="list-group list-group-flush">
+                    <li *ngFor="let bus of availableBuses" class="list-group-item d-flex justify-content-between align-items-center">
+                      <div>
+                        <span class="fw-medium">{{ bus.immatriculation }}</span>
+                        <small class="text-muted d-block">{{ bus.marqueModel || 'Model not specified' }}</small>
+                      </div>
+                      <span class="badge bg-primary rounded-pill">{{ bus.capacite }} seats</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card border-danger border-opacity-25">
+                <div class="card-header bg-danger bg-opacity-10">
+                  <h6 class="mb-0">
+                    <i class="bi bi-x-circle-fill text-danger me-2"></i>
+                    Unavailable Buses ({{unavailableBuses.length}})
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <ul class="list-group list-group-flush">
+                    <li *ngFor="let bus of unavailableBuses" class="list-group-item d-flex justify-content-between align-items-center">
+                      <div>
+                        <span class="fw-medium">{{ bus.immatriculation }}</span>
+                        <small class="text-muted d-block">{{ bus.marqueModel || 'Model not specified' }}</small>
+                      </div>
+                      <span class="badge bg-primary rounded-pill">{{ bus.capacite }} seats</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Routes Management Card -->
+    <div class="col-12">
+      <div class="card shadow-sm border-0 mt-4">
+        <div class="card-header bg-white border-0 py-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0 text-primary">
+              <i class="bi bi-signpost-split me-2"></i>Routes Management
+            </h5>
+            <button type="button" class="btn btn-primary" (click)="openTrajetModal()">
+              <i class="bi bi-plus-circle me-1"></i> Add Route
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
               <tr>
-                <td>{{chauffeur.idPermis}}</td>
-                <td>{{chauffeur.typePermis}}</td>
-                <td>{{chauffeur.dateValiditePermis | date:'dd/MM/yyyy'}}</td>
-                <td>{{chauffeur.etatCivile}}</td>
-                <td>{{chauffeur.note}}</td>
-                <td>{{chauffeur.disponibilite ? 'Disponible' : 'Indisponible'}}</td>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Distance</th>
+                <th>Duration</th>
+                <th>Cost/km</th>
+                <th>Pricing</th>
+                <th>Flat Rate</th>
+                <th>Zone</th>
+                <th>Client</th>
+                <th>Bus</th>
+                <th class="text-center">Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let trajet of trajets; let i = index">
+                <td>{{ trajet.dateDemarrageContrat | date:'shortDate' }}</td>
+                <td>{{ trajet.dateFinContrat | date:'shortDate' }}</td>
+                <td>{{ trajet.distanceMoyenne }} km</td>
+                <td>{{ trajet.dureeMoyenne }} min</td>
+                <td>{{ trajet.coutKm }} €</td>
                 <td>
-                  <button class="btn btn-sm btn-warning" (click)="selectedChauffeur = chauffeur; loadChauffeurDisponibilites(chauffeur.id)">Modifier</button>
-                  <button class="btn btn-sm btn-danger" (click)="deleteChauffeur(chauffeur.id)">Supprimer</button>
+                    <span class="badge bg-info text-dark">
+                      {{ trajet.typeTarification }}
+                    </span>
+                </td>
+                <td>{{ trajet.montantForfaitaire }} €</td>
+                <td>{{ trajet.zone?.id }}</td>
+                <td>{{ trajet.client?.id }}</td>
+                <td>{{ trajet.bus?.id }}</td>
+                <td class="text-center">
+                  <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-warning" (click)="editTrajet(trajet)">
+                      <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteTrajet(i)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
                 </td>
               </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Chauffeur Disponibilité Section -->
-      @if (selectedChauffeur) {
-        <div class="dispo-container">
-          <h3>Disponibilités pour {{selectedChauffeur.idPermis}}</h3>
-
-          <!-- Add Disponibilité Form -->
-          <div class="form-container">
-            <form (ngSubmit)="addChauffeurDisponibilite()">
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Date Début:</label>
-                  <input type="date" [(ngModel)]="newDispoChauffeur.dateDebutIndisponibilite" name="chauffeurDispoStart" required>
-                </div>
-
-                <div class="form-group">
-                  <label>Date Fin:</label>
-                  <input type="date" [(ngModel)]="newDispoChauffeur.dateFinIndisponibilite" name="chauffeurDispoEnd" required>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label>Description:</label>
-                <input type="text" [(ngModel)]="newDispoChauffeur.descriptionIndisponibilite" name="chauffeurDispoDesc">
-              </div>
-
-              <button type="submit" class="btn btn-primary">Ajouter Disponibilité</button>
-            </form>
+              </tbody>
+            </table>
           </div>
-
-          <!-- Disponibilité List -->
-          <table class="table">
-            <thead>
-            <tr>
-              <th>Date Début</th>
-              <th>Date Fin</th>
-              <th>Description</th>
-              <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-              @for (dispo of chauffeurDisponibilites(); track dispo.id) {
-                <tr>
-                  <td>{{dispo.dateDebutIndisponibilite | date:'dd/MM/yyyy'}}</td>
-                  <td>{{dispo.dateFinIndisponibilite | date:'dd/MM/yyyy'}}</td>
-                  <td>{{dispo.descriptionIndisponibilite}}</td>
-                  <td>
-                    <button class="btn btn-sm btn-danger" (click)="removeChauffeurDisponibilite(dispo.id)">Supprimer</button>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
         </div>
-      }
+      </div>
     </div>
-  }
+
+    <!-- Zones Management Card -->
+    <div class="col-12">
+      <div class="card shadow-sm border-0 mt-4">
+        <div class="card-header bg-white border-0 py-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0 text-primary">
+              <i class="bi bi-pin-map me-2"></i>Zones Management
+            </h5>
+            <button class="btn btn-primary" (click)="openCreateZoneModal()">
+              <i class="bi bi-plus-circle me-1"></i> Add Zone
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Zone Name</th>
+                <th class="text-center">Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let zone of zones">
+                <td class="fw-medium">{{ zone.id }}</td>
+                <td>{{ zone.designation }}</td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-warning" (click)="openEditZoneModal(zone)">
+                    <i class="bi bi-pencil-square"></i> Edit
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clients Management Card -->
+    <div class="col-12">
+      <div class="card shadow-sm border-0 mt-4">
+        <div class="card-header bg-white border-0 py-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0 text-primary">
+              <i class="bi bi-people me-2"></i>Clients Management
+            </h5>
+            <button (click)="toggleClientModal()" class="btn btn-primary">
+              <i class="bi bi-person-plus me-1"></i> Add Client
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Client</th>
+                <th>Contact</th>
+                <th>Tax ID</th>
+                <th>Zone</th>
+                <th>Revenue</th>
+                <th class="text-center">Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let client of clients; let i = index">
+                <td class="fw-medium">{{ client.id }}</td>
+                <td>
+                  <div class="fw-medium">{{ client.libelletClient }}</div>
+                  <small class="text-muted">{{ client.adresseClient }}</small>
+                </td>
+                <td>
+                  <div>{{ client.mailClient }}</div>
+                  <small class="text-muted">{{ client.telephoneClient }}</small>
+                </td>
+                <td>{{ client.matriculeFiscale }}</td>
+                <td>{{ client.zoneAction }}</td>
+                <td class="fw-medium">{{ client.chiffreAffaire }} €</td>
+                <td class="text-center">
+                  <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-warning" (click)="editClient(client)">
+                      <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteClient(i)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- Modals (unchanged functionality) -->
+<!-- Bus Modal -->
+<div *ngIf="modalOpen" class="modal fade show d-block" style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content p-4">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ selectedBus ? 'Edit Bus' : 'Add Bus' }}</h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <app-bus-form [bus]="selectedBus" (close)="closeModal()" (save)="onSaveBus($event)"></app-bus-form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Availability Modal -->
+<div *ngIf="dispoBusModalOpen" class="modal fade show d-block" style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content p-4">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Unavailability</h5>
+        <button type="button" class="btn-close" (click)="closeDispoBusModal()"></button>
+      </div>
+      <div class="modal-body">
+        <app-dispobus-form (close)="closeDispoBusModal()" (save)="onSaveDispoBus($event)"></app-dispobus-form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Route Modal -->
+<div *ngIf="trajetModalOpen" class="modal fade show d-block" style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content p-4">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ selectedTrajet ? 'Edit Route' : 'Add Route' }}</h5>
+        <button type="button" class="btn-close" (click)="closeTrajetModal()"></button>
+      </div>
+      <div class="modal-body">
+        <app-trajet-modal [trajet]="selectedTrajet" (close)="closeTrajetModal()" (save)="onSaveTrajet($event)"></app-trajet-modal>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Zone Modal -->
+<div *ngIf="isZoneModalOpen" class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <app-zone-modal
+        [zone]="selectedZone"
+        (save)="onSaveZone($event)"
+        (cancel)="onCancelZone()"
+      ></app-zone-modal>
+    </div>
+  </div>
+</div>
+<!-- Modal  -->
+<div *ngIf="clientModalOpen" class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <app-client-modal
+        [client]="selectedClient"
+        (clientSaved)="onClientSaved($event)"
+        (closeModal)="closeClientModal()">
+      </app-client-modal>
+    </div>
+  </div>
+</div>
+
+<!-- Client Modal would be here -->
+<!-- Client Management Section -->
+

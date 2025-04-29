@@ -1,0 +1,65 @@
+<!-- Execution Mission Modal -->
+<div class="modal-header">
+  <h5 class="modal-title" id="executionMissionModalLabel">{{ executionMission ? 'Modifier Exécution Mission' : 'Créer Exécution Mission' }}</h5>
+  <button type="button" class="close" (click)="onCancel()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="executionMissionForm" (ngSubmit)="onSubmit()">
+    <!-- ID (readonly si modification) -->
+    <div *ngIf="executionMission" class="form-group">
+      <label for="id">ID</label>
+      <input id="id" formControlName="id" class="form-control" type="text" readonly />
+    </div>
+
+    <!-- Date Heure Départ Réel -->
+    <div class="form-group">
+      <label for="dateHeureDepartReel">Date et Heure de Départ Réel</label>
+      <input id="dateHeureDepartReel" type="datetime-local" class="form-control" formControlName="dateHeureDepartReel" />
+    </div>
+
+    <!-- Date Heure Arrivée Réel -->
+    <div class="form-group">
+      <label for="dateHeureArriveReel">Date et Heure d'Arrivée Réel</label>
+      <input id="dateHeureArriveReel" type="datetime-local" class="form-control" formControlName="dateHeureArriveReel" />
+    </div>
+
+    <!-- Statut de l'Exécution -->
+    <div class="form-group">
+      <label for="statutExecution">Statut de l'Exécution</label>
+      <input id="statutExecution" type="text" class="form-control" formControlName="statutExecution" placeholder="Saisir le statut de l'exécution" />
+    </div>
+
+    <!-- Revenus -->
+    <div class="form-group">
+      <label for="revenus">Revenus</label>
+      <input id="revenus" type="number" class="form-control" formControlName="revenus" placeholder="Saisir les revenus" />
+    </div>
+
+    <!-- Mission -->
+    <div class="form-group">
+      <label for="missionId">Mission</label>
+      <input id="missionId" type="number" class="form-control" formControlName="missionId" placeholder="Saisir l'ID de la mission" />
+    </div>
+
+    <!-- Localisation -->
+    <div class="form-group">
+      <label for="localisationId">Localisation</label>
+      <input id="localisationId" type="number" class="form-control" formControlName="localisationId" placeholder="Saisir l'ID de la localisation" />
+    </div>
+
+    <!-- Facture -->
+    <div class="form-group">
+      <label for="factureId">Facture</label>
+      <input id="factureId" type="number" class="form-control" formControlName="factureId" placeholder="Saisir l'ID de la facture" />
+    </div>
+
+    <!-- Submit Button -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">Annuler</button>
+      <button type="submit" class="btn btn-primary" [disabled]="executionMissionForm.invalid">Enregistrer</button>
+    </div>
+  </form>
+</div>

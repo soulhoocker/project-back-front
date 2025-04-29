@@ -43,8 +43,10 @@ export class AuthService {
 
   login(credentials: LoginRequest): Observable<AuthResponseDTO> {
     return this.http.post<AuthResponseDTO>(`${this.apiUrl}/auth/login`, credentials).pipe(
-      catchError(this.handleError)  // Handle the error for signup too
-
+      tap((response: AuthResponseDTO) => {
+        localStorage.setItem('auth_token', response.token); // ✅ Enregistrement du token ici
+      }),
+      catchError(this.handleError)
     );
   }
 

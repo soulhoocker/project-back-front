@@ -93,7 +93,7 @@ export const NavigationItems: NavigationItem[] = [
         id: 'forms-element',
         title: 'Form Elements',
         type: 'item',
-        url: '/forms/basic',
+        url: '/user-table',
         classes: 'nav-item',
         icon: 'feather icon-file-text'
       },
